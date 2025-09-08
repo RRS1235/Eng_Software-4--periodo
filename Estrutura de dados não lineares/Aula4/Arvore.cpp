@@ -8,6 +8,14 @@ struct Raiz {
 	Raiz* left;
 };
 
+void imprimirArvore(Raiz* no) {
+    if (no == nullptr) return;
+
+    cout << no->valor << endl;            // Visita o nó atual
+    imprimirArvore(no->left);             // Visita o filho à esquerda
+    imprimirArvore(no->rigth);            // Visita o filho à direita
+}
+
 int main(){
 	
 	string tree[] = {"!", "&", "?", "emManutecao", "%", "MartinsLuc", "seguenoinstagram"};
@@ -22,7 +30,7 @@ int main(){
 	galho->rigth->left = new Raiz{"MartinsLuc", nullptr, nullptr}; 
 	galho->rigth->rigth = new Raiz{"seguenoinstagram", nullptr, nullptr};
 		
-	cout << galho->valor << endl;
+	imprimirArvore(galho);
 	
 	return 0;
 }
