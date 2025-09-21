@@ -36,3 +36,6 @@ int main() {
 
     return 0;
 }
+// Compilação de 1000 feito em 2.913 segundos
+// Compilação de 10000 feito em  4.454 segundos
+// Compilação de 1000000 feito em 7.652 segundos
