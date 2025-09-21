@@ -3,6 +3,8 @@
 #include <functional>
 
 // Funções de exemplo com complexidades diferentes
+
+// No O(n) o tempo foi de 0.67 segundos
 long long f_linear(long long n) {
     long long cont = 0;
     for (long long i = 0; i < n; i++) {
@@ -11,6 +13,7 @@ long long f_linear(long long n) {
     return cont;
 }
 
+// No O(n^2) o tempo foi de 20.98 segundos
 long long f_quadratic(long long n) {
     long long cont = 0;
     for (long long i = 0; i < n; i++) {
@@ -21,6 +24,7 @@ long long f_quadratic(long long n) {
     return cont;
 }
 
+// No O(n log n) o tempo foi de 0.57 segundos
 long long f_nlogn(long long n) {
     long long cont = 0;
     for (long long i = 0; i < n; i++) {
