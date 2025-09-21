@@ -1,91 +1,124 @@
 #include <iostream>
+
 using namespace std;
 
-struct Node {
-    int key;
-    Node* left;
-    Node* right;
-    Node(int value) : key(value), left(nullptr), right(nullptr) {}
+// Estrutura para representar um nó na arvore binaria de busca
+struct No {
+    int chave;
+    No* esquerda;
+    No* direita;
+
+    // Construtor para inicializar um novo nó
+    No(int valor) : chave(valor), esquerda(nullptr), direita(nullptr) {}
 };
-Node* insertNode(Node* root, int key) {
-    if (root == nullptr) {
-        return new Node(key);
+
+// Funcao para inserir um novo nó na arvore
+No* inserirNo(No* raiz, int chave) {
+    // Se a arvore estiver vazia, retorna um novo nó
+    if (raiz == nullptr) {
+        return new No(chave);
     }
-    if (key < root->key) {
-        root->left = insertNode(root->left, key);
+
+    // Caso contrario, percorre a arvore
+    if (chave < raiz->chave) {
+        // Se a chave for menor, insere na subarvore da esquerda
+        raiz->esquerda = inserirNo(raiz->esquerda, chave);
+    } else if (chave > raiz->chave) {
+        // Se a chave for maior, insere na subarvore da direita
+        raiz->direita = inserirNo(raiz->direita, chave);
     }
-    else if (key > root->key) {
-        root->right = insertNode(root->right, key);
-    }
-    return root;
+    // Retorna o ponteiro (inalterado) do nó
+    return raiz;
 }
-Node* findMinValueNode(Node* node) {
-    Node* current = node;
-    while (current && current->left != nullptr) {
-        current = current->left;
+
+// Funcao auxiliar para encontrar o nó com o menor valor (o sucessor inorder)
+No* encontrarNoComValorMinimo(No* no) {
+    No* atual = no;
+    // Percorre a subarvore da esquerda para encontrar o menor valor
+    while (atual && atual->esquerda != nullptr) {
+        atual = atual->esquerda;
     }
-    return current;
+    return atual;
 }
-Node* deleteNode(Node* root, int key) {
-    if (root == nullptr) {
-        return root;
+
+// Funcao para remover um nó da arvore
+No* removerNo(No* raiz, int chave) {
+    // Caso base: se a arvore estiver vazia
+    if (raiz == nullptr) {
+        return raiz;
     }
-    if (key < root->key) {
-        root->left = deleteNode(root->left, key);
-    } else if (key > root->key) {
-        root->right = deleteNode(root->right, key);
-    } else {
-        if (root->left == nullptr) {
-            Node* temp = root->right;
-            delete root;
+
+    // Se a chave for menor que a raiz, busca na subarvore da esquerda
+    if (chave < raiz->chave) {
+        raiz->esquerda = removerNo(raiz->esquerda, chave);
+    }
+    // Se a chave for maior que a raiz, busca na subarvore da direita
+    else if (chave > raiz->chave) {
+        raiz->direita = removerNo(raiz->direita, chave);
+    }
+    // Se a chave for igual a raiz, entao este é o nó a ser removido
+    else {
+        // Caso 1: Nó com apenas um filho ou nenhum filho
+        if (raiz->esquerda == nullptr) {
+            No* temp = raiz->direita;
+            delete raiz; // Libera a memória do nó
             return temp;
-        } else if (root->right == nullptr) {
-            Node* temp = root->left;
-            delete root;
+        } else if (raiz->direita == nullptr) {
+            No* temp = raiz->esquerda;
+            delete raiz;
             return temp;
         }
 
-        Node* temp = findMinValueNode(root->right);
+        // Caso 2: Nó com dois filhos
+        // Encontra o sucessor (menor nó na subarvore da direita)
+        No* temp = encontrarNoComValorMinimo(raiz->direita);
 
-        root->key = temp->key;
+        // Copia o valor do sucessor para este nó
+        raiz->chave = temp->chave;
 
-        root->right = deleteNode(root->right, temp->key);
+        // Remove o sucessor (que agora é um nó com 0 ou 1 filho)
+        raiz->direita = removerNo(raiz->direita, temp->chave);
     }
-    return root;
+    return raiz;
 }
 
-void inorderTraversal(Node* root) {
-    if (root != nullptr) {
-        inorderTraversal(root->left);
-        cout << root->key << " ";
-        inorderTraversal(root->right);
+// Funcao para percorrer a arvore em ordem (inorder traversal)
+void percorrerEmOrdem(No* raiz) {
+    if (raiz != nullptr) {
+        percorrerEmOrdem(raiz->esquerda);
+        cout << raiz->chave << " ";
+        percorrerEmOrdem(raiz->direita);
     }
 }
 
 int main() {
-    Node* root = nullptr;
+    No* raiz = nullptr;
 
-    root = insertNode(root, 10);
-    root = insertNode(root, 5);
-    root = insertNode(root, 15);
-    root = insertNode(root, 2);
-    root = insertNode(root, 7);
-    root = insertNode(root, 20);
+    // Construção inicial da arvore
+    raiz = inserirNo(raiz, 10);
+    raiz = inserirNo(raiz, 5);
+    raiz = inserirNo(raiz, 15);
+    raiz = inserirNo(raiz, 2);
+    raiz = inserirNo(raiz, 7);
+    raiz = inserirNo(raiz, 20);
 
+    // Exibição da arvore original
     cout << "Arvore original (percurso em ordem): ";
-    inorderTraversal(root);
+    percorrerEmOrdem(raiz);
     cout << endl;
 
+    // Teste de inserção
     cout << "\nInserindo o valor 12..." << endl;
-    root = insertNode(root, 12);
+    raiz = inserirNo(raiz, 12);
     cout << "Arvore apos a insercao de 12 (percurso em ordem): ";
-    inorderTraversal(root);
+    percorrerEmOrdem(raiz);
     cout << endl;
 
-    cout << "\nExcluindo o no com valor 15..." << endl;
-    root = deleteNode(root, 15);
-    cout << "Arvore apos a exclusao de 15 (percurso em ordem): ";
-    inorderTraversal(root);
+    // Teste de exclusão
+    cout << "\nRemovendo o no com valor 15..." << endl;
+    raiz = removerNo(raiz, 15);
+    cout << "Arvore apos a remocao de 15 (percurso em ordem): ";
+    percorrerEmOrdem(raiz);
     cout << endl;
 
     return 0;
