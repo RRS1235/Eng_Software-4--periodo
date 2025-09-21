@@ -2,15 +2,12 @@
 #include <cmath>
 
 // Função que estima as comparações do Bubble Sort (O(n^2))
-// A fórmula para o pior caso é aproximadamente n^2.
-// Para uma estimativa mais precisa do número de comparações, a fórmula é (n * (n - 1)) / 2.
 long long estimarComparacoesBubbleSort(long long n) {
     if (n < 2) return 0;
     return (n * (n - 1)) / 2;
 }
 
 // Função que estima as comparações do Merge Sort (O(n log n))
-// A fórmula para o número de comparações é n * log2(n).
 long long estimarComparacoesMergeSort(long long n) {
     if (n <= 1) return 0;
     return n * log2(n);
