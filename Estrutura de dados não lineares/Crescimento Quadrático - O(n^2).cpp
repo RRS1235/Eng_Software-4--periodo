@@ -2,7 +2,7 @@
 using namespace std;
 /* run this program using the console pauser or add your own getch, system("pause") or input loop */
 
-int exemplo(int n) {
+int quadratico(int n) {
 	
     int cont = 0;
     
@@ -15,7 +15,6 @@ int exemplo(int n) {
     return cont;
 }
 
-
 int main(int argc, char** argv) {
 	
 	//int num;
@@ -24,9 +23,7 @@ int main(int argc, char** argv) {
 	
 	int num; cin >> num;
 	
-	
-	
-	int result = exemplo(num);
+	int result = quadratico(num);
 	
 	cout << "Resultado ao quadrado: " << result << endl;
 	
